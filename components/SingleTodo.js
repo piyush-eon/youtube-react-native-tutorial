@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  AsyncStorage,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SingleTodo = ({ todo, todos, setTodos }) => {
   const [edit, setEdit] = useState(false);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  AsyncStorage,
-  ScrollView,
+  FlatList,
   StatusBar,
   StyleSheet,
   Text,
@@ -9,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import SingleTodo from "./components/SingleTodo";
 
 export default function App() {
@@ -23,7 +23,7 @@ export default function App() {
 
   const fetchTodos = async () => {
     const data = await AsyncStorage.getItem("todos");
-    setTodos(JSON.parse(data));
+    if (data) setTodos(JSON.parse(data));
   };
 
   useEffect(() => {
@@ -44,7 +44,10 @@ export default function App() {
           <Text style={styles.button}>Go</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={{ width: "100%", marginTop: 10 }}>
+      {/* ScrollView vs FlatList */}
+
+      {/* Using ScrollView and map() */}
+      {/* <ScrollView style={{ width: "100%", marginTop: 10 }}> 
         {todos?.map((todo) => (
           <SingleTodo
             todos={todos}
@@ -53,7 +56,18 @@ export default function App() {
             key={todo.id}
           />
         ))}
-      </ScrollView>
+      </ScrollView> */}
+
+      {/* By FlatList */}
+      <View style={{ width: "100%", marginTop: 10 }}>
+        <FlatList
+          data={todos}
+          renderItem={({ item }) => (
+            <SingleTodo todos={todos} setTodos={setTodos} todo={item} />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      </View>
       <StatusBar style="auto" />
     </View>
   );
